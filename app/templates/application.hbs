@@ -1,3 +1,14 @@
-<h2 id="title">Welcome to Ember</h2>
+<div>
+{{#data-visual as |ctx width height|}}
+  <div>WIDTH: {{width}}</div>
+  <div>HEIGHT: {{height}}</div>
+  {{#d3-beeswarm select=ctx.svg.select.beeswarm model=inventoryData width=width height=height
+        margin="10" color=(color-scale "category10")
+      as |width height|}}
 
-{{outlet}}
+      width is {{width}}
+      height is {{height}}
+
+  {{/d3-beeswarm}}
+{{/data-visual}}
+</div>

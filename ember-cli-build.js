@@ -4,6 +4,12 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
     // Add options here
+    d3: {
+      // ember-cli-d3 version >= 0.7.0
+      plugins: {
+        'mbostock': [ 'sankey' ]
+      }
+    }
   });
 
   // Use `app.import` to add additional libraries to the generated
