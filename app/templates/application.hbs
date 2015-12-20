@@ -2,7 +2,7 @@
 {{#data-visual as |ctx width height|}}
   <div>WIDTH: {{width}}</div>
   <div>HEIGHT: {{height}}</div>
-  {{#d3-beeswarm select=ctx.svg.select.beeswarm model=inventoryData width=width height=height
+  {{#d3-beeswarm select=ctx.svg.select.beeswarm model=model width=width height=height
         margin="10" color=(color-scale "category10")
       as |width height|}}
 
