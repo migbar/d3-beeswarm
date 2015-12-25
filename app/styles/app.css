@@ -14,9 +14,9 @@ html, body {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4);
-  -moz-box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4);
-  box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4);
+  -webkit-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .data-visual {
@@ -24,11 +24,12 @@ html, body {
   height: 600px;
 }
 
-.x-axis {
+.x.axis {
   font-family: sans-serif;
-  fill: #777;
-  transform-y: 400px;
+  fill: #999;
+  /*transform-y: 400px;*/
 }
+
 .circle {
   cursor: pointer;
 }
@@ -42,9 +43,10 @@ html, body {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4);
-  -moz-box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4);
-  box-shadow: 4px 4px 12px rgba( 0, 0, 0, 0.4); pointer-events: none;
+  -webkit-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
   }
 
 #tooltip.hidden {
@@ -57,4 +59,48 @@ html, body {
   font-size: 16px;
   line-height: 20px;
 }
+
+/*  path.line {
+    fill: none;
+    stroke: purple;
+    stroke-width: 1.5;
+  }
+*/
+/*  path.area {
+    fill: #E2B2B2;
+  }
+*/
+/*  .axis {
+     shape-rendering: crispEdges;
+  }
+*/
+  .x.axis line {
+     stroke: #bbb;
+     stroke-width: 1.0;
+  }
+
+/*  .x.axis .minor {
+     stroke-opacity: .5;
+     stroke: red;
+     stroke-width: 1.5;
+  }
+*/
+    .x.axis path {
+       fill: none;
+       stroke: #ccc;
+       stroke-width: 1.0;
+    }
+
+/*  .y.axis line, .y.axis path {
+     fill: none;
+     stroke: #17BED5;
+     stroke-width: 1.0;
+  }
+
+  .y.axis .minor{
+     stroke: #52D12A;
+     stroke-width: 1.5;
+     stroke-opacity: 0.5;
+  }*/
+
 

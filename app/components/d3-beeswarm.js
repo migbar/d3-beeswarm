@@ -15,7 +15,7 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
     4 - decorations based on data (border, color, P1)
     5 - user filtering of nodes
   **/
-  layout: hbs`{{yield currentModelClass currentPrice}}`,
+  layout: hbs`{{yield currentModelClass currentPrice currentDate currentColor}}`,
 
   vehicles: Ember.computed.alias('model'),
 
@@ -63,35 +63,35 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
     const axisYPosition = this.get('height') / 1.5;
     selection
       .append('g')
-      .classed('x-axis', true)
+      .classed('x axis', true)
       .call(xAxis);
 
-    d3.select('.x-axis')
+    d3.select('.x.axis')
       .attr('transform', `translate(0 ${ axisYPosition })`);
   },
 
-  popup(d, elem, selection) {
-    // Get this bar's x/ y values, then augment for the tooltip
-    var xPosition = parseFloat(d3.select(elem).attr("cx")); // + this.get('xScale').range() / 2;
-    var yPosition = parseFloat(d3.select(elem).attr("cy")); // + this.get('contentHeight') / 2;
+  showPopup(d, elem, selection) {
+    d3.select(elem)
+      .style('stroke-width', '2')
+      .style('stroke', '#000');
+
+    this.set('currentPrice', d.price);
+    this.set('currentDate', d.date);
+    this.set('currentModelClass', d.modelClass);
+    this.set('currentColor', d.color);
     // Update the tooltip position and value
+    d3.select("#tooltip")
+        .style("left", d3.event.x + "px")
+        .style("top",  d3.event.y + "px");
+
+    // d3.select("#modelClass")
+    //   .text(d.modelClass);
+
+    // d3.select("#price")
+    //   .text(d.price);
 
     d3.select("#tooltip")
-      .style("left", xPosition + "px")
-      .style("top",  yPosition + "px")
-      .select("#modelClass")
-      .text(d.modelClass);
-
-    d3.select("#price")
-      .text(d.price);
-
-      // Show the tooltip
-      d3.select("#tooltip")
-        .classed("hidden", false);
-
-
-
-
+      .classed("hidden", false);
 
     // this.set('currentModelClass', d.modelClass);
     // this.set('currentPrice', d.price);
@@ -131,14 +131,22 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
 
       d3.selectAll('.circle')
         .on('mouseover', function(d) {
-          comp.popup(d, this, selection);
+          comp.showPopup(d, this, selection);
         })
         .on('mouseout', function(d) {
           // d3.select("#tooltip").remove();
-          d3.select("#tooltip")
-            .classed("hidden", true);
+          comp.hidePopup(d, this, selection);
         });
 
+  },
+
+  hidePopup(d, elem, selection) {
+    d3.select("#tooltip")
+      .classed("hidden", true);
+
+    d3.select(elem)
+      .style('stroke-width', '0');
+      // .style('stroke', '#000');
   },
 
   setupForce(selection) {

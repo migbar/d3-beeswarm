@@ -9,9 +9,9 @@
     marginValue="10"
     color=(color-scale "category20b")
 
-      as |modelClass price color|}}
+      as |modelClass price date color|}}
 
-      {{inventory-popup modelClass=modelClass price=price color=color}}
+        {{inventory-popup modelClass=modelClass price=price date=date color=color}}
 
   {{/d3-beeswarm}}
 

@@ -1,9 +1,20 @@
 <div id="tooltip" class ="hidden">
+
   <p id="modelClass">
     <strong>{{modelClass}}</strong>
   </p>
+
   <p>
-    <span id="price"> {{price}} </span>
+    <span id="price">{{format-number price format='$0,0'}}</span>
   </p>
+
+  <p>
+    <span id="date">{{moment-format date 'ddd, MMMM Do YYYY'}}</span>
+  </p>
+
+  <p>
+    <span id="color">{{color}}</span>
+  </p>
+
 </div>
 
