@@ -1,14 +1,19 @@
-<div>
+<div class="inventory-swarm">
 {{#data-visual as |ctx width height|}}
-  <div>WIDTH: {{width}}</div>
-  <div>HEIGHT: {{height}}</div>
-  {{#d3-beeswarm select=ctx.svg.select.beeswarm model=model width=width height=height
-        margin="10" color=(color-scale "category10")
-      as |width height|}}
 
-      width is {{width}}
-      height is {{height}}
+  {{#d3-beeswarm
+    select=ctx.svg.select.beeswarm
+    model=model
+    width=width
+    height=height
+    marginValue="10"
+    color=(color-scale "category20b")
+
+      as |modelClass price color|}}
+
+      {{inventory-popup modelClass=modelClass price=price color=color}}
 
   {{/d3-beeswarm}}
+
 {{/data-visual}}
 </div>

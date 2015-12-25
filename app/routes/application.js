@@ -20,6 +20,10 @@ export default Ember.Route.extend({
     return this.one('white blue black orange red green yellow'.w());
   },
 
+  randomModelClass() {
+    return this.one('A B C CLK ML GLC GL GLK ML CLS CL S SL SLK SLS'.w());
+  },
+
   randomUpholstery() {
     return this.one('tan grey black'.w());
   },
@@ -29,7 +33,7 @@ export default Ember.Route.extend({
   },
 
   model() {
-    let numCars = 100;
+    let numCars = 200;
     let res = [];
 
     for (var i = 0; i < numCars; i++) {
@@ -38,6 +42,7 @@ export default Ember.Route.extend({
         price: this.randomInt(35000, 125000),
         date: this.futureDate().toDate(),
         color: this.randomColor(),
+        modelClass: this.randomModelClass(),
         upholstery: this.randomUpholstery(),
       }
       res.pushObject(veh);
