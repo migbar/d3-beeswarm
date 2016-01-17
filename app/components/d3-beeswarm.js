@@ -7,7 +7,6 @@ const { get } = Ember;
 import GraphicSupport from 'ember-cli-d3/mixins/d3-support';
 import MarginConvention from 'ember-cli-d3/mixins/margin-convention';
 
-export default Ember.Component.extend(GraphicSupport, MarginConvention, {
   /**
     1 - pull data in
     2 - axis
@@ -15,41 +14,35 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
     4 - decorations based on data (border, color, P1)
     5 - user filtering of nodes
   **/
-  layout: hbs`{{yield currentModelClass currentPrice currentDate currentColor}}`,
-
+export default Ember.Component.extend(GraphicSupport, MarginConvention, {
+  layout: hbs`{{yield currentVehicle}}`,
+  currentVehicle: null, //set on hover for the tooltip yield
+  xPadding: 50,
   vehicles: Ember.computed.alias('model'),
-
-  currentModelClass: null,
-  currentPrice: null,
 
   xScale: Ember.computed('contentWidth', 'vehicles', function() {
     const width = this.get('contentWidth');
     const timeDomain = d3.extent(this.get('vehicles'), vehicle => vehicle.date);
     const timeScale = d3.time.scale();
-    return timeScale.domain(timeDomain).range([ 0, width ]);
+    return timeScale.domain(timeDomain).range([ this.get('xPadding'), (width - this.get('xPadding')) ]);
   }),
 
   nodes: Ember.computed('contentWidth', 'contentHeight', function() {
     const comp = this;
     const width  = this.get('contentWidth');
-    const height = this.get('contentHeight');
+    const height = this.get('contentHeight') / 2;
 
     return this.get('vehicles').map(function(veh) {
       const true_x = comp.get('xScale')(veh.date);
-      return {
-        radius: Math.random() * 12 + 4,
-        x: true_x,
-        true_y: height / 2,
-        color: veh.color,
-        modelClass: veh.modelClass,
-        date: veh.date,
-        price: veh.price,
-        true_x: true_x };
+      const radius = veh.price/10000 + 3;
+      return { vehicle: veh, x: true_x, true_x: true_x, true_y: height, radius: radius };
       });
   }),
 
   copy(obj) {
-    return JSON.parse(JSON.stringify(obj));
+    if (obj) {
+      return JSON.parse(JSON.stringify(obj));
+    }
   },
 
   call(selection) {
@@ -59,8 +52,13 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
   },
 
   setupAxis(selection) {
+    // debugger;
+    selection.selectAll(".x.axis").remove();
+
+    // console.log('in setup axis');
     const xAxis = d3.svg.axis().scale(this.get('xScale')).orient(" bottom").ticks(15);
     const axisYPosition = this.get('height') / 1.5;
+    // console.log('axisYPosition', axisYPosition);
     selection
       .append('g')
       .classed('x axis', true)
@@ -71,46 +69,19 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
   },
 
   showPopup(d, elem, selection) {
+    // set vehicle for tooltip
+    this.set('currentVehicle', d.vehicle);
+
+    // set stroke for the element being hovered
     d3.select(elem)
       .style('stroke-width', '2')
       .style('stroke', '#000');
 
-    this.set('currentPrice', d.price);
-    this.set('currentDate', d.date);
-    this.set('currentModelClass', d.modelClass);
-    this.set('currentColor', d.color);
-    // Update the tooltip position and value
+    // Update the tooltip position and make it visible
     d3.select("#tooltip")
-        .style("left", d3.event.x + "px")
-        .style("top",  d3.event.y + "px");
-
-    // d3.select("#modelClass")
-    //   .text(d.modelClass);
-
-    // d3.select("#price")
-    //   .text(d.price);
-
-    d3.select("#tooltip")
+      .style("left", d3.event.x + "px")
+      .style("top",  d3.event.y + "px")
       .classed("hidden", false);
-
-    // this.set('currentModelClass', d.modelClass);
-    // this.set('currentPrice', d.price);
-
-    // const xPosition = parseFloat(d3.select(elem).attr("cx")); // + this.get('xScale').rangeBand() / 2;
-    // const yPosition = parseFloat(d3.select(elem).attr("cy")); // + 14;
-
-    // selection
-    //   .append("text")
-    //   .attr("id", "tooltip")
-    //   .attr("x", xPosition)
-    //   .attr("y", yPosition)
-    //   .attr("text-anchor", "middle")
-    //   .attr("font-family", "sans-serif")
-    //   .attr("font-size", "11px")
-    //   .attr("font-weight", "bold")
-    //   .attr("fill", "black")
-    //   .text( d.modelClass );
-
   },
 
   setupCircles(selection) {
@@ -126,27 +97,22 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
       .enter()
         .append("circle")
         .attr("r", function(d) { return d.radius; })
-        .style("fill", function(d, i) { return color(d.modelClass); })
+        .style("fill", function(d, i) { return color(d.vehicle.modelClass); })
         .classed("circle", true);
 
       d3.selectAll('.circle')
-        .on('mouseover', function(d) {
-          comp.showPopup(d, this, selection);
-        })
-        .on('mouseout', function(d) {
-          // d3.select("#tooltip").remove();
-          comp.hidePopup(d, this, selection);
-        });
-
+        .on('mouseover', function(d) { comp.showPopup(d, this, selection); })
+        .on('mouseout',  function(d) { comp.hidePopup(d, this, selection); });
   },
 
   hidePopup(d, elem, selection) {
+    // hide the tooltip
     d3.select("#tooltip")
       .classed("hidden", true);
 
+    // remove the stroke for the element
     d3.select(elem)
       .style('stroke-width', '0');
-      // .style('stroke', '#000');
   },
 
   setupForce(selection) {
@@ -158,7 +124,7 @@ export default Ember.Component.extend(GraphicSupport, MarginConvention, {
     const force = d3.layout.force()
         .gravity(0.01)
         .charge(0.01)
-        .friction(0.96)
+        .friction(0.9)
         .nodes(nodes)
         .size([width, height]);
 

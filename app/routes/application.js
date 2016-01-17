@@ -20,8 +20,10 @@ export default Ember.Route.extend({
     return this.one('white blue black orange red green yellow'.w());
   },
 
+  modelClasses: 'A B C CLK ML GLC GL GLK ML CLS CL S SL SLK SLS'.w(),
   randomModelClass() {
-    return this.one('A B C CLK ML GLC GL GLK ML CLS CL S SL SLK SLS'.w());
+    // return this.one('A B C CLK ML GLC GL GLK'.w());
+    return this.one(this.get('modelClasses'));
   },
 
   randomUpholstery() {

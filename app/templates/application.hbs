@@ -1,17 +1,37 @@
 <div class="inventory-swarm">
+<div class="actions">
+  <button {{action 'refresh'}}>refresh</button>
+  <button {{action 'remove'}}>remove</button>
+</div>
+
+{{!-- {{model-class-selection-list modelClasses=modelClasses on-toggle=(action 'toggleClassSelection')}} --}}
+
+{{input type="checkbox" name="modelClass" checked=A}}
+{{input type="checkbox" name="modelClass" checked=B}}
+{{input type="checkbox" name="modelClass" checked=C}}
+{{input type="checkbox" name="modelClass" checked=CLK}}
+{{input type="checkbox" name="modelClass" checked=ML}}
+{{input type="checkbox" name="modelClass" checked=GLC}}
+{{input type="checkbox" name="modelClass" checked=GL}}
+{{input type="checkbox" name="modelClass" checked=GLK}}
+{{input type="checkbox" name="modelClass" checked=CLS}}
+{{input type="checkbox" name="modelClass" checked=CL}}
+{{input type="checkbox" name="modelClass" checked=S}}
+{{input type="checkbox" name="modelClass" checked=SL}}
+{{input type="checkbox" name="modelClass" checked=SLK}}
+{{input type="checkbox" name="modelClass" checked=SLS}}
+
 {{#data-visual as |ctx width height|}}
 
   {{#d3-beeswarm
     select=ctx.svg.select.beeswarm
-    model=model
+    model=selectedVehicles
     width=width
     height=height
-    marginValue="10"
     color=(color-scale "category20b")
 
-      as |modelClass price date color|}}
-
-        {{inventory-popup modelClass=modelClass price=price date=date color=color}}
+      as |currentVehicle|}}
+        {{inventory-popup vehicle=currentVehicle}}
 
   {{/d3-beeswarm}}
 

@@ -14,9 +14,15 @@ html, body {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  -webkit-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+
+
+  -webkit-box-shadow: 3px 1px 10px 1px rgba(221,221,221,1);
+  -moz-box-shadow: 3px 1px 10px 1px rgba(221,221,221,1);
+  box-shadow: 3px 1px 10px 1px rgba(221,221,221,1);
+
+/*  -webkit-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
   -moz-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
-  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.4);*/
 }
 
 .data-visual {
